@@ -1,0 +1,36 @@
+package com.JDBC编程.JDBC简单查询;
+
+import java.sql.*;
+
+public class Test {
+    public static void main(String[] args) {
+        //1.加载驱动程序
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        //2.链接数据库
+        try {
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/memo?user=root&password=1052602391");
+            //3.创建命令
+            Statement statement = connection.createStatement();
+            //4.准备SQL，并且执行
+            ResultSet resultSet = statement.executeQuery("select id,name,created_time,modify_time from memo_group");
+            //5.返回结果集，处理结果
+            while(resultSet.next()){
+                int id = resultSet.getInt("id");
+                String name = resultSet.getString("name");
+                Timestamp createdTime = resultSet.getTimestamp("created_time");
+                Timestamp modiyTime = resultSet.getTimestamp("modify_time");
+                System.out.println(
+                        String.format("编号: %d, 名称: %s, 创建时间: %s, 修改时间: %s",id,name,createdTime.toString(),modiyTime.toString())
+                );
+                //System.out.println(resultSet.getString("t.table_name"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+}
